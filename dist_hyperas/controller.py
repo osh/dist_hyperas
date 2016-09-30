@@ -46,6 +46,9 @@ class Controller:
         else:
             print "Controller received invalid command: ", msg
 
+    def shutdown(self):
+        self.ioloop.stop()
+
 if __name__ == "__main__":
     import worker
     conf = json.load(open("target.json"))

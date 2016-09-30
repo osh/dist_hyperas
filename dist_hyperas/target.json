@@ -1,0 +1,7 @@
+{
+    "devices":["cpu"],
+    "devices1":["gpu3"],
+    "ddevices2":["gpu0","gpu1","gpu2","gpu3"],
+    "port_min":8000,
+    "port_max":20000
+}

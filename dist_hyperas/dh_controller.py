@@ -20,7 +20,15 @@ class ControllerDH(controller.Controller):
         pass
     
     def on_available(self, stream):
-        self.stream.send_json( ("run_model","foo") )
+        print "launching new model to worker..."
+        self.stream.send_json( ("run_model",self.dataset,self.model) )
+
+    def on_model_failure(self, stream, ds_hash, model_hash):
+        print "things broke, shutting down."
+        self.shutdown()
+
+    def on_model_success(self, stream, ds_hash, model_hash):
+        print "great success"
     
 if __name__ == "__main__":
     ControllerDH("target.json")

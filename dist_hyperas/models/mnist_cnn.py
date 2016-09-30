@@ -2,6 +2,8 @@ from keras.models import Model
 from keras.layers import Input, Dense, Dropout, Activation, Flatten
 from keras.layers import Convolution2D, MaxPooling2D
 
+asdadasd hjk
+
 def build_model():
     v = Input(shape=(28,28))
     h = Convolution2D(nb_filters, kernel_size[0], kernel_size[1],

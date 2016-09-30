@@ -41,5 +41,6 @@ class Worker(multiprocessing.Process):
         print "Ping running"
         self.socket.send("test")
 
-
+    def shutdown(self):
+        self.ioloop.stop()
 
