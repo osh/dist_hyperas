@@ -32,6 +32,7 @@ class Controller:
         self.ioloop.call_later(1.0, self.on_start)
         self.stream.on_recv_stream(self.on_rcv)
         self.ioloop.start()
+        self.ioloop.close()
 
     def on_start(self):
         print "Controller: start doing stuff"
@@ -47,6 +48,7 @@ class Controller:
             print "Controller received invalid command: ", msg
 
     def shutdown(self):
+        self.socket.send_json( ("shutdown",) )
         self.ioloop.stop()
 
 if __name__ == "__main__":

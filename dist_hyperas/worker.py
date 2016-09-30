@@ -26,6 +26,7 @@ class Worker(multiprocessing.Process):
         self.ioloop.start()
 
     def on_rcv(self, msg):
+        print msg
         msg = json.loads(msg[0])
         op = msg[0]
         if(hasattr(self,"on_"+op)):
