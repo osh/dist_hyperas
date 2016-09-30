@@ -2,6 +2,7 @@ readme information... coming soon
 
 basically this is what happens here:
 
+```
  [2.039406419881185, 0.13577102455894152], u'epoch': [0, 1], u'time': 20.692888021469116, u'accuracy': 0.984}
 (worker available gpu0) launching new model to worker...
 1475215229.75 Model returned results: gpu1 392261103527195121 1174066377352204012 {u'loss': 0.06286983437425807, u'vloss_hist': [0.08694266658127307, 0.06286983418827877], u'loss_hist': [1.5290434392770131, 0.14178805553515753], u'epoch': [0, 1], u'time': 20.677179098129272, u'accuracy': 0.9807}
@@ -19,4 +20,4 @@ basically this is what happens here:
 1475215262.55 Model returned results: gpu3 392261103527195121 1174066377352204012 {u'loss': 0.050177874105953375, u'vloss_hist': [0.06735702128000558, 0.0501778740003705], u'loss_hist': [1.239953548558553, 0.1310390730202198], u'epoch': [0, 1], u'time': 19.226721048355103, u'accuracy': 0.9831}
 (worker available gpu3) launching new model to worker...
 1475215265.72 Model returned results: gpu0 392261103527195121 1174066377352204012 {u'loss': 0.059501270283787745, u'vloss_hist': [0.08193846620209515, 0.05950127024576068], u'loss_hist': [2.6259114333550135, 0.14827882204055787], u'epoch': [0, 1], u'time': 19.079010009765625, u'accuracy': 0.9798}
-
+```
