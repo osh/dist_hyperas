@@ -14,7 +14,6 @@ class Worker(worker.Worker):
         import theano,keras
 
     def on_ping(self):
-        print "ping running"
         if not self.busy:
             self.socket.send_json( ("available",) )
 
@@ -31,6 +30,7 @@ class Worker(worker.Worker):
                 exec dataset
                 self.datasets[ds_hash] = locals()["train_model"]
             except Exception,err:
+                print " ********************************* "
                 traceback.print_exc()
                 print " *** Dataset Python is Broken! *** "
                 self.socket.send_json( ("dataset_failure", ds_hash, model_hash ) )
@@ -40,8 +40,10 @@ class Worker(worker.Worker):
         try:
             exec model
             model_factory = locals()["build_model"]
-            self.datasets[ds_hash](model_factory)
+            model = model_factory()
+            self.datasets[ds_hash](model)
         except Exception,err:
+            print " ********************************* "
             traceback.print_exc()
             print " *** Model Python is Broken! *** "
             self.socket.send_json( ("model_failure", ds_hash, model_hash ) )
