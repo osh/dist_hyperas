@@ -20,7 +20,12 @@ class Worker(multiprocessing.Process):
         self.ioloop = ioloop.IOLoop.instance()
         self.ioloop.add_callback(self.on_start)
         tornado.ioloop.PeriodicCallback(self.on_ping, 1000).start()
-        self.ioloop.start()
+        try:
+            self.ioloop.start()
+        except KeyboardInterrupt:
+            self.shutdown()
+        self.ioloop.close()
+        
 
     def on_rcv(self, msg):
         msg = json.loads(msg[0])

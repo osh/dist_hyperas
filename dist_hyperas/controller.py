@@ -31,8 +31,14 @@ class Controller:
         self.ioloop = ioloop.IOLoop.instance()
         self.ioloop.call_later(1.0, self.on_start)
         self.stream.on_recv_stream(self.on_rcv)
-        self.ioloop.start()
+        try:
+            self.ioloop.start()
+        except KeyboardInterrupt:
+            print " ** Got keyboard interrupt (^C) shutting down cleanly ... ** "
+            self.shutdown()
         self.ioloop.close()
+        for d,p in self.processes.iteritems():
+            p.join()
 
     def on_start(self):
         print "Controller: start doing stuff"
