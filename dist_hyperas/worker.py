@@ -25,8 +25,14 @@ class Worker(multiprocessing.Process):
         print "Worker entering eventloop."
         self.ioloop.start()
 
-    def on_rcv(self,msg):
-        print "worker rx pkt: ", msg
+    def on_rcv(self, msg):
+        msg = json.loads(msg[0])
+        op = msg[0]
+        if(hasattr(self,"on_"+op)):
+            f = getattr(self, "on_"+op)
+            f(*msg[1:])
+        else:
+            print "Controller received invalid command: ", msg
 
     def on_start(self):
         print "Worker started"

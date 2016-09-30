@@ -37,8 +37,14 @@ class Controller:
         print "Controller: start doing stuff"
 
     def on_rcv(self, stream, msg):
-        print "Controller RX:", stream, msg
-        self.stream.send("thx")
+        msg = json.loads(msg[0])
+        op = msg[0]
+        if(hasattr(self,"on_"+op)):
+            f = getattr(self, "on_"+op)
+            args = [stream]+msg[1:]
+            f(*args)
+        else:
+            print "Controller received invalid command: ", msg
 
 if __name__ == "__main__":
     import worker
