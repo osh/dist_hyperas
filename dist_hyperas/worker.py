@@ -12,7 +12,6 @@ class Worker(multiprocessing.Process):
         (self.args, self.controller_uri) = (args, controller_uri)
 
     def run(self):
-        print "Worker init."
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.DEALER)
         self.socket.connect (self.controller_uri)
@@ -21,8 +20,6 @@ class Worker(multiprocessing.Process):
         self.ioloop = ioloop.IOLoop.instance()
         self.ioloop.add_callback(self.on_start)
         tornado.ioloop.PeriodicCallback(self.on_ping, 1000).start()
-
-        print "Worker entering eventloop."
         self.ioloop.start()
 
     def on_rcv(self, msg):

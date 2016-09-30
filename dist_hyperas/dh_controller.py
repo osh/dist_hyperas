@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import worker,controller
 import dh_worker
-import json,pprint
+import json,pprint,time
 
 class ControllerDH(controller.Controller):
     def __init__(self, fn, model, dataset):
@@ -18,17 +18,18 @@ class ControllerDH(controller.Controller):
     def on_start(self):
         pass
     
-    def on_available(self, stream):
-        print "(worker available) launching new model to worker..."
+    def on_available(self, stream, args):
+        print "(worker available %s) launching new model to worker..."%(args)
         self.stream.send_json( ("run_model",self.dataset,self.model) )
 
     def on_model_failure(self, stream, ds_hash, model_hash):
         self.shutdown()
+
     def on_dataset_failure(self, stream, ds_hash, model_hash):
         self.shutdown()
 
-    def on_model_success(self, stream, ds_hash, model_hash):
-        pass
+    def on_model_success(self, stream, args, ds_hash, model_hash, results):
+        print time.time(), "Model returned results:", args, ds_hash, model_hash, results
     
 if __name__ == "__main__":
     ControllerDH("target.json")

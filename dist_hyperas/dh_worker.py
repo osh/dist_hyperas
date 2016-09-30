@@ -15,7 +15,7 @@ class Worker(worker.Worker):
 
     def on_ping(self):
         if not self.busy:
-            self.socket.send_json( ("available",) )
+            self.socket.send_json( ("available",self.args) )
 
     def on_shutdown(self):
         self.shutdown()
@@ -37,11 +37,12 @@ class Worker(worker.Worker):
                 self.shutdown()
                 return
     
+        perf = None
         try:
             exec model
             model_factory = locals()["build_model"]
             model = model_factory()
-            self.datasets[ds_hash](model)
+            perf = self.datasets[ds_hash](model)
         except Exception,err:
             print " ********************************* "
             traceback.print_exc()
@@ -51,4 +52,4 @@ class Worker(worker.Worker):
             return
         
         self.busy = False
-        self.socket.send_json( ("model_success", ds_hash, model_hash ) )
+        self.socket.send_json( ("model_success", self.args, ds_hash, model_hash, perf) )
