@@ -1,3 +1,5 @@
+unfinished work in progress ...
+
 readme information... coming soon
 
 basically this is what happens here:
