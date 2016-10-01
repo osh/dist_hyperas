@@ -34,7 +34,7 @@ class Worker(multiprocessing.Process):
             f = getattr(self, "on_"+op)
             f(*msg[1:])
         else:
-            print "Controller received invalid command: ", msg
+            print "Worker received invalid command: ", msg
 
     def on_start(self):
         print "Worker started"

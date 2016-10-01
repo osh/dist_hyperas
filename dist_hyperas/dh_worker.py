@@ -11,6 +11,7 @@ class Worker(worker.Worker):
     def on_start(self):
         os.environ["KERAS_BACKEND"] = "theano"
         os.environ["THEANO_FLAGS"]  = "device=%s"%(self.args)
+#        os.environ["CUDA_VISIBLE_DEVICES"] = self.args[-1]
         import theano,keras
 
     def on_ping(self):
@@ -20,7 +21,8 @@ class Worker(worker.Worker):
     def on_shutdown(self):
         self.shutdown()
 
-    def on_run_model(self,dataset,model):
+    def on_run_model(self,work):
+        (info,dataset,model) = work
         self.busy = True
         ds_hash = hash(dataset)
         model_hash = hash(model)
@@ -33,7 +35,7 @@ class Worker(worker.Worker):
                 print " ********************************* "
                 traceback.print_exc()
                 print " *** Dataset Python is Broken! *** "
-                self.socket.send_json( ("dataset_failure", ds_hash, model_hash ) )
+                self.socket.send_json( ("dataset_failure", info ) )
                 self.shutdown()
                 return
     
@@ -47,9 +49,9 @@ class Worker(worker.Worker):
             print " ********************************* "
             traceback.print_exc()
             print " *** Model Python is Broken! *** "
-            self.socket.send_json( ("model_failure", ds_hash, model_hash ) )
+            self.socket.send_json( ("model_failure", info ) )
             self.shutdown()
             return
         
         self.busy = False
-        self.socket.send_json( ("model_success", self.args, ds_hash, model_hash, perf) )
+        self.socket.send_json( ("model_success", info, perf) )
