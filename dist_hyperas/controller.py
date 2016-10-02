@@ -12,12 +12,16 @@ class Controller:
 
         # Set up server socket
         self.context = zmq.Context()
-        self.socket = self.context.socket(zmq.DEALER)
+        self.socket = self.context.socket(zmq.ROUTER)
         self.port = self.socket.bind_to_random_port('tcp://*', min_port=cfg["port_min"], max_port=cfg["port_max"], max_tries=100)
         self.uri = "tcp://127.0.0.1:%d"%(self.port)
         print "Controller listening on %s"%(self.uri)
 
         self.start()
+
+    def send_json(self, identity, obj):
+        self.stream.send( identity, zmq.SNDMORE )
+        self.stream.send_json(obj)
 
     def start(self):
         # Launch worker subprocesses
@@ -44,17 +48,19 @@ class Controller:
         print "Controller: start doing stuff"
 
     def on_rcv(self, stream, msg):
-        msg = json.loads(msg[0])
+        [identity,msg] = msg
+        #print identity,msg
+        msg = json.loads(msg)
         op = msg[0]
         if(hasattr(self,"on_"+op)):
             f = getattr(self, "on_"+op)
-            args = [stream]+msg[1:]
+            args = [identity]+msg[1:]
             f(*args)
         else:
             print "Controller received invalid command: ", msg
 
     def shutdown(self):
-        self.socket.send_json( ("shutdown",) )
+        #self.socket.send_json( ("shutdown",) )
         self.ioloop.stop()
 
 if __name__ == "__main__":

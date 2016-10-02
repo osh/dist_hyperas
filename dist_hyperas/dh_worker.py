@@ -13,6 +13,7 @@ class Worker(worker.Worker):
         os.environ["THEANO_FLAGS"]  = "device=%s"%(self.args)
 #        os.environ["CUDA_VISIBLE_DEVICES"] = self.args[-1]
         import theano,keras
+        print "Worker ready"
 
     def on_ping(self):
         if not self.busy:
