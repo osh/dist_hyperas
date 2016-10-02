@@ -44,7 +44,7 @@ class ControllerDH(controller.Controller):
         task["work_finished"].append( (info,results) )
         self.send_json(task["owner"], ("subtask_finished", info,  results) )
         if(len(task["work_finished"])==task["n_subtask"]):
-            print "Task finsihed: ",tid
+            print "Task finished: ",tid
             self.tasks["active"].pop(tid)
             owner = task.pop("owner")
             self.tasks["finished"] = task

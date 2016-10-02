@@ -36,6 +36,7 @@ def produce_variant(src, info, i=0):
         r1 = "++HOPT%d++"%(k)
         r2 = info[k]["options"][opt_idx]
         info[k]["selected"] = opt_idx
+        info[k]["value"] = r2
         src = src.replace("++HOPT%d++"%(k), str(info[k]["options"][opt_idx]),1)
         i = rem_idx
     return info,src
