@@ -1,0 +1,41 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+        socket.on('connect', function() {
+            socket.emit('devices', {data: 'connect'});
+        });
+        socket.on('devices', function(data) {
+            s = "<table>"
+            s += "<tr><td><b>Device</b></td><td>Busy</td></tr>"
+            for (k in data){
+                s += "<tr><td>" + k + "</td><td>"+ data[k]["busy"] +"</td></tr>\n"
+            }
+            s += "</table>"
+            $('#devdiv').html(s);
+        });
+        socket.on('tasks', function(data) {
+            s = "<table>"
+            s += "<tr><td><b>Task</b></td></tr>"
+            for (k in data){
+                s += "<tr><td>" + k + "</td></tr>\n"
+            }
+            s += "</table>"
+            $('#taskdiv').html(s);
+        });
+    </script>
+</head>
+<body>
+    <div style="background:#c0c0c0; wposition:absolute; idth:800px; height:100px; top:0px; " id="div1">
+        <b>Dist_Hyperas Monitor Tool</b>
+    </div>
+    <div style="background:#c0c0c0; position:absolute; width:200px; height:600px; top:120px; " id="devdiv">
+        Loading devices..
+    </div>
+    <div style="background:#e0e0e0; position:absolute; width:800px; height:600px; top:120px; left:220px; " id="taskdiv">
+        Loading tasks...
+    </div>
+</body>
+</html>

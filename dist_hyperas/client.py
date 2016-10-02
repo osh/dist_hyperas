@@ -7,7 +7,7 @@ import numpy as np
 import hopt
 
 class Client:
-    def __init__(self, uri):
+    def __init__(self, uri=open(os.getenv("HOME") + "/.dh_uri","r").read()):
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.DEALER)
         self.socket.connect (uri)
@@ -36,5 +36,8 @@ class Client:
             pprint.pprint(msg)
             if(msg[0] == "task_finished"):
                 return msg[1]
-                
+
+    def rx_msg(self):
+        msg = self.socket.recv_json()
+        return msg
 

@@ -13,6 +13,7 @@ class ControllerDH(controller.Controller):
             "active":{},
             "finished":{}
             }
+        self.devices = {}
             
         # launch proceses and go into event loop
         controller.Controller.__init__(self, self.cfg, dh_worker.Worker, self.cfg["devices"])
@@ -28,8 +29,9 @@ class ControllerDH(controller.Controller):
             info["tid"] = tid
             print "sending work from tid",tid
             self.send_json(identity, ("run_model",work) )
+            self.devices[args] = {"last":time.time(), "busy":True, "task":tid}
         else:
-            pass
+            self.devices[args] = {"last":time.time(), "busy":False}
 
     def on_model_failure(self, identity, info):
         self.shutdown()
@@ -64,7 +66,12 @@ class ControllerDH(controller.Controller):
     def on_shutdown(self, identity):
         self.shutdown()
 
-    
+    def on_req_devices(self,identity):
+        self.send_json(identity,("devices",self.devices))
+
+    def on_req_tasks(self,identity):
+        self.send_json(identity,("tasks",self.tasks))
+        
 if __name__ == "__main__":
     ControllerDH("target.json")
 
